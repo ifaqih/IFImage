@@ -1,0 +1,22 @@
+{
+  "name": "ifaqih/ifimage",
+  "description": "Image manipulation library for PHP",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "IFaqih\\IFImage\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "ifaqih",
+      "email": "awah.if@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "version": "1.0.0",
+  "require": {
+    "php": ">= 8.0"
+  }
+}
