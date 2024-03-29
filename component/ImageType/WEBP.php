@@ -15,9 +15,6 @@ class WEBP extends AbstractType
     {
         static::$image_manipulation = static::$image_manipulation ?? imagecreatetruecolor(static::$target_size['width'], static::$target_size['height']);
 
-        // static::$quality = (static::$quality / 100) * 9;
-        // static::$quality = ((static::$quality < 1) ? intval(ceil(static::$quality)) : intval(static::$quality));
-        // var_dump(static::$quality);
         // Mengisi offest gambar target dengan warna transparan
         imagesavealpha(static::$image_manipulation, true);
         $offset = imagecolorallocatealpha(static::$image_manipulation, 255, 255, 255, 127);

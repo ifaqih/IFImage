@@ -11,12 +11,6 @@ class PNG extends AbstractType
         return static::getInstance();
     }
 
-    // public static function ___quality(int $quality): object
-    // {
-    //     static::$quality = intval(($quality / 100) * 9);
-    //     return static::getInstance();
-    // }
-
     public static function ___save(string $target_file): bool
     {
         static::$image_manipulation = static::$image_manipulation ?? imagecreatetruecolor(static::$target_size['width'], static::$target_size['height']);

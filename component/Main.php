@@ -2,6 +2,8 @@
 
 namespace IFaqih\IFImage\Component;
 
+use Exception;
+
 class Main
 {
     protected static $file_name;
@@ -156,51 +158,76 @@ class Main
      * @param bool $name_with_old_extension nama menyertakan ekstensi lama, tidak akan disertakan jika tidak ada konversi tipe file (default false).
      * @return bool
      */
-    public function save(string $target_dir, string $image_name = null, bool $name_with_size = false, bool $name_with_old_extension = false): bool
+    public function save(string $target_dir, string $image_name = null, int $flag = 0): bool
     {
         if (!empty(static::$file_name) && !empty(static::$image_file) && !empty(static::$image_size) && !empty(static::$image_type) && !empty(static::$instance)) {
+            try {
+                static::$target_type = static::$target_type ?? static::$image_type;
 
-            static::$target_type = static::$target_type ?? static::$image_type;
+                $ex = explode(".", static::$file_name);
+                $key_extension = count($ex) - 1;
+                $extension = $ex[$key_extension];
 
-            $ex = explode(".", static::$file_name);
-            $key_extension = count($ex) - 1;
-            $extension = $ex[$key_extension];
+                if (empty($image_name)) {
+                    $image_name = "";
 
-            if (empty($image_name)) {
-                $image_name = "";
-
-                for ($i = 0; $i < $key_extension; $i++) {
-                    $image_name .= $ex[$i];
+                    for ($i = 0; $i < $key_extension; $i++) {
+                        $image_name .= $ex[$i];
+                    }
                 }
-            }
 
-            if ($name_with_size) {
-                $image_name = $image_name . "-" . static::$target_size['width'] . "x" . static::$target_size['height'];
-            }
+                if (($flag & IFIMAGE_NAME_WITH_SIZE) === IFIMAGE_NAME_WITH_SIZE) {
+                    $image_name = $image_name . "-" . static::$target_size['width'] . "x" . static::$target_size['height'];
+                }
 
-            if ($name_with_old_extension) {
-                $image_name = $image_name . "." . $extension;
-            }
+                if (($flag & IFIMAGE_NAME_WITH_OLD_EXTENSION) === IFIMAGE_NAME_WITH_OLD_EXTENSION) {
+                    $image_name = $image_name . "." . $extension;
+                }
 
-            $target_file = str_replace('\\', '/', (in_array(substr($target_dir, -1), ['/', '\\']) ? $target_dir . $image_name : $target_dir . "/" . $image_name));
+                $target_dir = str_replace('\\', '/', (in_array(substr($target_dir, -1), ['/', '\\']) ? $target_dir : $target_dir . "/"));
 
-            switch (static::$target_type) {
-                case IMAGETYPE_JPEG:
-                    require_once __DIR__ . "/ImageType/JPEG.php";
-                    return \IFaqih\IFImage\Component\ImageType\JPEG::___save($target_file);
-                    break;
-                case IMAGETYPE_PNG:
-                    require_once __DIR__ . "/ImageType/PNG.php";
-                    return \IFaqih\IFImage\Component\ImageType\PNG::___save($target_file);
-                    break;
-                case IMAGETYPE_WEBP:
-                    require_once __DIR__ . "/ImageType/WEBP.php";
-                    return \IFaqih\IFImage\Component\ImageType\WEBP::___save($target_file);
-                    break;
-                default:
-                    return false;
-                    break;
+                if (($flag & IFIMAGE_FORCE_CREATE_DIRECTORY) === IFIMAGE_FORCE_CREATE_DIRECTORY) {
+                    $target_dir = substr($target_dir, 0, (strlen($target_dir) - 1));
+                    if (!file_exists($target_dir)) {
+                        $ex = explode('/', $target_dir);
+                        $target_dir = "";
+                        foreach ($ex as $key => $value) {
+                            $target_dir .= $value;
+                            if (!in_array($value, ['', ' ', null])) {
+                                if (!file_exists($target_dir) || !is_dir($target_dir)) {
+                                    mkdir($target_dir);
+                                }
+                            }
+                            $target_dir .= "/";
+                        }
+                    }
+                    $target_dir = str_replace("//", "/", $target_dir . "/");
+                }
+
+                $target_file = $target_dir . $image_name;
+
+                switch (static::$target_type) {
+                    case IMAGETYPE_JPEG:
+                        require_once __DIR__ . "/ImageType/JPEG.php";
+                        return \IFaqih\IFImage\Component\ImageType\JPEG::___save($target_file);
+                        break;
+                    case IMAGETYPE_PNG:
+                        require_once __DIR__ . "/ImageType/PNG.php";
+                        return \IFaqih\IFImage\Component\ImageType\PNG::___save($target_file);
+                        break;
+                    case IMAGETYPE_WEBP:
+                        require_once __DIR__ . "/ImageType/WEBP.php";
+                        return \IFaqih\IFImage\Component\ImageType\WEBP::___save($target_file);
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            } catch (Exception $e) {
+                die("Error: " . $e->getMessage());
             }
+        } else {
+            return false;
         }
     }
 }

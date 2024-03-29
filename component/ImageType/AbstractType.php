@@ -45,7 +45,5 @@ abstract class AbstractType extends Main
 
     abstract public static function ___load(string $image_file): object;
 
-    // abstract public static function ___quality(int $quality): object;
-
     abstract public static function ___save(string $target_file): bool;
 }

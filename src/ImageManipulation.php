@@ -6,7 +6,7 @@ require_once __DIR__ . "/../component/Void.php";
 
 use IFaqih\IFImage\Component\Main;
 
-class Image extends Main
+class ImageManipulation extends Main
 {
 
     public function __construct()
