@@ -154,11 +154,13 @@ class Main
      *
      * @param string $target_dir direktori dimana gambar akan disimpan.
      * @param string $image_name nama gambar yang akan disimpan, tidak perlu menyertakan ekstensi file (default null).
-     * @param bool $name_with_size nama menyertakan luas gambar (default false).
-     * @param bool $name_with_old_extension nama menyertakan ekstensi lama, tidak akan disertakan jika tidak ada konversi tipe file (default false).
+     * @param int $flag flag untuk opsi saat menyimpan (default 0). Flag tersedia:
+     *                          - IFIMAGE_NAME_WITH_SIZE : 1, menambahkan luas gambar pada nama file gambar.
+     *                          - IFIMAGE_NAME_WITH_OLD_EXTENSION : 2, menambahkan ekstensi lama pada pada nama file gambar.
+     *                          - IFIMAGE_FORCE_CREATE_DIRECTORY : 4, paksa membuat directory bila directory tujuan tidak tersedia.
      * @return bool
      */
-    public function save(string $target_dir, string $image_name = null, int $flag = 0): bool
+    public function save(string $target_dir, string|null $image_name = null, int $flag = 0): bool
     {
         if (!empty(static::$file_name) && !empty(static::$image_file) && !empty(static::$image_size) && !empty(static::$image_type) && !empty(static::$instance)) {
             try {
