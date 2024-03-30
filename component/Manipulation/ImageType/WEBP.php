@@ -1,13 +1,13 @@
 <?php
 
-namespace IFaqih\IFImage\Component\ImageType;
+namespace IFaqih\IFImage\Component\Manipulation\ImageType;
 
-class JPEG extends AbstractType
+class WEBP extends AbstractType
 {
 
     public static function ___load(string $image_file): object
     {
-        static::$image_file = imagecreatefromjpeg($image_file);
+        static::$image_file = imagecreatefromwbmp($image_file);
         return static::getInstance();
     }
 
@@ -16,13 +16,15 @@ class JPEG extends AbstractType
         static::$image_manipulation = static::$image_manipulation ?? imagecreatetruecolor(static::$target_size['width'], static::$target_size['height']);
 
         // Mengisi offest gambar target dengan warna transparan
-        $offset = imagecolorallocate(static::$image_manipulation, 255, 255, 255);
+        imagesavealpha(static::$image_manipulation, true);
+        $offset = imagecolorallocatealpha(static::$image_manipulation, 255, 255, 255, 127);
+        $offset = imagecolortransparent(static::$image_manipulation, $offset);
 
         imagefill(static::$image_manipulation, 0, 0, $offset);
 
         self::process_image();
 
-        $save_new_image = imagejpeg(static::$image_manipulation, $target_file . ".jpeg", static::$quality);
+        $save_new_image = imagewebp(static::$image_manipulation, $target_file . ".webp", static::$quality);
 
         self::destroy_image();
 

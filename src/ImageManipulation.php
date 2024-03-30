@@ -2,11 +2,11 @@
 
 namespace IFaqih\IFImage;
 
-require_once __DIR__ . "/../component/Void.php";
+require_once __DIR__ . "/../component/Manipulation/Void.php";
 
-use IFaqih\IFImage\Component\Main;
+use IFaqih\IFImage\Component\Manipulation\Manipulation;
 
-class ImageManipulation extends Main
+class ImageManipulation extends Manipulation
 {
 
     public function __construct()
@@ -18,7 +18,7 @@ class ImageManipulation extends Main
      * Load Image.
      *
      * @param string $image_file gambar yang akan diload.
-     * @return \IFaqih\IFImage\Component\Main
+     * @return \IFaqih\IFImage\Component\Manipulation\Manipulation
      * @method resize(int $width, int $height): object
      * @method quality(int $quality): object
      * @method convert(string|int $image_type): object

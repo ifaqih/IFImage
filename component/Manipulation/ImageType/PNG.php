@@ -1,6 +1,6 @@
 <?php
 
-namespace IFaqih\IFImage\Component\ImageType;
+namespace IFaqih\IFImage\Component\Manipulation\ImageType;
 
 class PNG extends AbstractType
 {

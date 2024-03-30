@@ -1,13 +1,11 @@
 <?php
 
-namespace IFaqih\IFImage\Component\ImageType;
+namespace IFaqih\IFImage\Component\Manipulation\ImageType;
 
-use IFaqih\IFImage\Component\Main;
+use IFaqih\IFImage\Component\Manipulation\Manipulation;
 
-abstract class AbstractType extends Main
+abstract class AbstractType extends Manipulation
 {
-
-
 
     public function __construct()
     {
